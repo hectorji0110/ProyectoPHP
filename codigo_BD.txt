@@ -1,0 +1,44 @@
+-- Crear base de datos
+CREATE DATABASE IF NOT EXISTS proyectophp;
+USE proyectophp;
+
+
+
+-- Crear tabla usuarios con nuevas columnas
+CREATE TABLE usuarios (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    email VARCHAR(150) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    edad INT,
+    rol ENUM('admin','usuario') DEFAULT 'cliente',
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    fecha_actualizacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    reset_token VARCHAR(255) DEFAULT NULL,
+    reset_expira DATETIME DEFAULT NULL
+);
+
+--Para asignar admin
+UPDATE usuarios
+SET rol = 'admin'
+WHERE id = 1; -- Aquí eliges el ID del usuario que quieres que sea admin
+
+-- Tabla de productos
+CREATE TABLE productos (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(150) NOT NULL,
+    descripcion TEXT,
+    precio DECIMAL(10,2) NOT NULL,
+    stock INT NOT NULL DEFAULT 0,
+    estado ENUM('activo','inactivo') DEFAULT 'activo',
+    imagen VARCHAR(255) DEFAULT NULL,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    fecha_actualizacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+);
+-- para agregar producto lo realizamos en la pagina realizada
+
+
+--realice la tabla de password_reset pero utilice update  para que se guardara el token en usuarios
+ $stmt = $db->prepare("UPDATE usuarios SET reset_token=?, reset_expira=? WHERE id=?");
+    $stmt->execute([$token, $expira, $user['id']]);
